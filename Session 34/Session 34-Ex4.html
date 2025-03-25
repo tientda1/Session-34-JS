@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List K24_PTIT</title>
+    <style>
+        body {
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 400px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input {
+            width: 70%;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .addBtn {
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            width: 50px;
+            height: 30px;
+            cursor: pointer;
+        }
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .task-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .deleteBtn {
+            border: none;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 5px;
+            width: 40px;
+            height: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>To-Do List</h2>
+        <input type="text" id="taskInput" placeholder="Nhập nhiệm vụ...">
+        <button class="addBtn" onclick="addTask()">Thêm</button>
+        <ul id="taskList" class="task-list"></ul>
+    </div>
+
+    <script>
+        // Load danh sách công việc khi trang được tải
+        document.addEventListener("DOMContentLoaded", loadTasks);
+
+        function addTask() {
+            let input = document.getElementById("taskInput");
+            let taskText = input.value.trim();
+            if (taskText === "") {
+                alert("Vui lòng nhập nhiệm vụ!");
+                return;
+            }
+
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.push(taskText);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+
+            renderTasks();
+            input.value = "";
+        }
+
+        function renderTasks() {
+            let taskList = document.getElementById("taskList");
+            taskList.innerHTML = ""; // Xóa danh sách cũ
+
+            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            tasks.forEach((task, index) => {
+                let li = document.createElement("li");
+                li.innerHTML = `${task} <button class='deleteBtn' onclick='deleteTask(${index})'>Xóa</button>`;
+                taskList.appendChild(li);
+            });
+        }
+
+        function deleteTask(index) {
+            if (confirm("Bạn có chắc chắn muốn xóa nhiệm vụ này không?")) {
+                let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+                tasks.splice(index, 1);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+                renderTasks();
+            }
+        }
+
+        function loadTasks() {
+            renderTasks();
+        }
+    </script>
+</body>
+</html>

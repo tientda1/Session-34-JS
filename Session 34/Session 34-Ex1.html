@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background: #f4f4f4;
+        justify-content: center;
+        display: flex;
+      }
+      form {
+        width: 30%;
+        background: white;
+        padding: 20px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 50px;
+      }
+      input {
+        width: 97%;
+        justify-content: center;
+        height: 30px;
+      }
+      #submit {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        height: 40px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <form onsubmit="submitEvent(event)">
+      <h2 style="text-align: center">Register</h2>
+      <label>Email:</label><br /><br />
+      <input
+        type="email"
+        name="email"
+        id="email"
+        placeholder="Enter your email address"
+      /><br /><br />
+      <label>Password:</label><br /><br />
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Enter your password"
+      /><br /><br />
+      <label>Confirm Password:</label><br /><br />
+      <input
+        type="password"
+        name="confirmPass"
+        id="confirmPass"
+        placeholder="Enter your confirm password"
+      /><br /><br />
+      <input type="submit" name="submit" id="submit" value="Register" />
+    </form>
+
+    <script>
+      function submitEvent(event) {
+        event.preventDefault();
+        let email = document.getElementById("email").value.trim();
+        let password = document.getElementById("password").value.trim();
+        let confirmPass = document.getElementById("confirmPass").value.trim();
+        if (!email) {
+          alert("Email không được bỏ trống!");
+          return;
+        }
+        if (!password) {
+          alert("Mật khẩu không được bỏ trống!");
+          return;
+        }
+        if (password !== confirmPass) {
+          alert("Mật khẩu xác nhận không trùng khớp!");
+          return;
+        }
+        let users = JSON.parse(localStorage.getItem("users")) || [];
+        let isEmailExists = users.some((user) => user.email === email);
+        if (isEmailExists) {
+          alert("Email này đã được đăng ký!");
+          return;
+        }
+        users.push({ email, password });
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("Đăng ký thành công!");
+        document.querySelector("form").reset();
+      }
+    </script>
+  </body>
+</html>
